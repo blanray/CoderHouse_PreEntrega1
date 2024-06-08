@@ -4,24 +4,38 @@ def crearBase():
     try:
         with open('baseDatos.json', 'r') as archivoDatos:
             print("La base ya existe")
-    except Exception as error:
+    except FileNotFoundError:
+
+        miBaseVacia = {}
+
         with open('baseDatos.json', 'w') as archivoDatos:
+            json.dump(miBaseVacia, archivoDatos, ensure_ascii=False, indent=2)
             print("La base se creó exitosamente")
 
-def leerBase(nombreBase):
+    except Exception as error:
+        with open('baseDatos.json', 'w') as archivoDatos:
+            print("Ocurrio un error:", type(error).__name__) 
+
+def leerBase():
     try:
         with open('baseDatos.json', 'r') as archivoDatos:
             datos = json.load(archivoDatos)
 
-        for key, value in datos.items():
-            print(f"Clave: {key}")
-            print(f"Valor: {value}")
+        if len(datos)== 0:
+            print("La base está vacía")
+        else:
+            for key, value in datos.items():
+                print(f"Clave: {key}")
+                print(f"Valor: {value}")
+
     except Exception as error:
         print("Ocurrio un error:", type(error).__name__) 
 
 
 def alta():
-    pass
+
+    with open('tu_archivo.json', 'w') as jf: 
+        json.dump(data, jf, ensure_ascii=False, indent=2)
     
 def login():
     pass
