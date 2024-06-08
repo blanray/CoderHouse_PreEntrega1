@@ -16,32 +16,56 @@ def crearBase():
         with open('baseDatos.json', 'w') as archivoDatos:
             print("Ocurrio un error:", type(error).__name__) 
 
-def leerBase():
+def abrirBase():
     try:
         with open('baseDatos.json', 'r') as archivoDatos:
             datos = json.load(archivoDatos)
+        return datos
+    except Exception as error:
+        print("Ocurrio un error:", type(error).__name__) 
+
+
+def leerBase():
+    try:
+
+        datos = abrirBase()
 
         if len(datos)== 0:
             print("La base está vacía")
         else:
+            print("Usuario / Password")
             for key, value in datos.items():
-                print(f"Clave: {key}")
-                print(f"Valor: {value}")
+                print(f"{key}: {value}")
 
+        return datos
     except Exception as error:
         print("Ocurrio un error:", type(error).__name__) 
 
 
 def alta():
 
-    with open('tu_archivo.json', 'w') as jf: 
-        json.dump(data, jf, ensure_ascii=False, indent=2)
+    try:
+
+        datos = abrirBase()
+
+        miUsuario = input("Ingrese nombre usuario: ")
+        miPass = input("Ingrese la contraseña: ")
+
+        datos[miUsuario]= miPass
+
+        with open('baseDatos.json', 'w') as archivoDatos:
+            json.dump(datos, archivoDatos, ensure_ascii=False, indent=2)
+        
+        print("Registro agregado exitosamente")
     
+    except Exception as error:
+        print("Ocurrio un error:", type(error).__name__) 
+
 def login():
     pass
 
 try:
-    
+
     opcion = 9
 
     while opcion!=0:
