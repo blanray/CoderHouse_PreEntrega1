@@ -47,7 +47,7 @@ def leerBase():
         if len(datos)== 0:
             print("\n---- La base está vacía ----\n")
         else:
-            print("Usuario / Password")
+            print("\n\nUsuario / Password\n")
             for key, value in datos.items():
                 print(f"{key}: {value}")
 
