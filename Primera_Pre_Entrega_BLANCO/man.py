@@ -1,21 +1,34 @@
 import json
+import msvcrt
 import os
+
+
+def pausa():
+
+    print("Presione barra espacadora para continuar...")
+    key = None
+    while key != ' ':
+        key = msvcrt.getwch()
+        os.system("cls")
+        
 
 def crearBase():
     try:
         with open('baseDatos.json', 'r') as archivoDatos:
-            print("La base ya existe")
+            print("\n----- La base ya existe ----\n")
     except FileNotFoundError:
 
         miBaseVacia = {}
 
         with open('baseDatos.json', 'w') as archivoDatos:
             json.dump(miBaseVacia, archivoDatos, ensure_ascii=False, indent=2)
-            print("La base se creó exitosamente")
+            print("\n---- La base se creó exitosamente ----\n")
 
     except Exception as error:
         with open('baseDatos.json', 'w') as archivoDatos:
-            print("Ocurrio un error:", type(error).__name__) 
+            print("\n---- Ocurrio un error:", type(error).__name__)
+    finally:
+        pausa()
 
 def abrirBase():
     try:
@@ -23,7 +36,7 @@ def abrirBase():
             datos = json.load(archivoDatos)
         return datos
     except Exception as error:
-        print("Ocurrio un error:", type(error).__name__) 
+        print("\n---- Ocurrio un error:", type(error).__name__) 
 
 
 def leerBase():
@@ -32,7 +45,7 @@ def leerBase():
         datos = abrirBase()
 
         if len(datos)== 0:
-            print("La base está vacía")
+            print("\n---- La base está vacía ----\n")
         else:
             print("Usuario / Password")
             for key, value in datos.items():
@@ -40,8 +53,9 @@ def leerBase():
 
         return datos
     except Exception as error:
-        print("Ocurrio un error:", type(error).__name__) 
-
+        print("\n---- Ocurrio un error:", type(error).__name__) 
+    finally:
+        pausa()
 
 def alta():
 
@@ -50,12 +64,12 @@ def alta():
         datos = abrirBase()
 
         encontrado = False
-        miUsuario = input("Ingrese nombre usuario: ")
-        miPass = input("Ingrese la contraseña: ")
+        miUsuario = input("\n - Ingrese nombre usuario: ")
+        miPass = input("\n  -- Ingrese la contraseña: ")
 
         for key in datos:
             if miUsuario == key:
-                print("Error! El usuario ya existe!")
+                print("\n---- Error! El usuario ya existe! ----\n")
                 encontrado = True
                 break
         
@@ -64,10 +78,12 @@ def alta():
             with open('baseDatos.json', 'w') as archivoDatos:
                 json.dump(datos, archivoDatos, ensure_ascii=False, indent=2)
 
-            print("Registro agregado exitosamente")
+            print("\n----- Registro agregado exitosamente ----\n")
     
     except Exception as error:
-        print("Ocurrio un error:", type(error).__name__) 
+        print("\n---- Ocurrio un error:", type(error).__name__) 
+    finally:
+        pausa()
 
 def login():
     try:
@@ -78,10 +94,10 @@ def login():
         encontrado = False
 
         if len(datos)== 0:
-            print("La base está vacía")
+            print("\n---- La base está vacía ----\n")
         else:
-            miUsuario = input("Ingrese nombre usuario: ")
-            miPass = input("Ingrese la contraseña: ")
+            miUsuario = input("\n - Ingrese nombre usuario: ")
+            miPass = input("\n  -- Ingrese la contraseña: ")
 
             for key, value in datos.items():
                 if key == miUsuario:
@@ -91,14 +107,16 @@ def login():
 
             if encontrado:
                 if passTemp == miPass:
-                        print("Login exitoso")
+                        print("\n---- Login exitoso ----\n")
                 else:
-                        print("Contraseña incorrecta")
+                        print("\n---- Contraseña incorrecta ----\n")
             else:
-                print("El usuario no existe")
+                print("\n----- El usuario no existe ----\n")
 
     except Exception as error:
-        print("Ocurrio un error:", type(error).__name__) 
+        print("\n---- Ocurrio un error:", type(error).__name__) 
+    finally:
+        pausa()
 
 try:
 
@@ -127,4 +145,4 @@ try:
            print(f"Tecla {opcion} incorrecta!!!!")
                  
 except Exception as error:
-    print("Ocurrio el error:", type(error).__name__) 
+    print("\n---- Ocurrio el error:", type(error).__name__) 
