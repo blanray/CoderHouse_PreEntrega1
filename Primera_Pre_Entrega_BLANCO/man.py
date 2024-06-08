@@ -1,4 +1,5 @@
 import json
+import os
 
 def crearBase():
     try:
@@ -48,21 +49,56 @@ def alta():
 
         datos = abrirBase()
 
+        encontrado = False
         miUsuario = input("Ingrese nombre usuario: ")
         miPass = input("Ingrese la contraseña: ")
 
-        datos[miUsuario]= miPass
-
-        with open('baseDatos.json', 'w') as archivoDatos:
-            json.dump(datos, archivoDatos, ensure_ascii=False, indent=2)
+        for key in datos:
+            if miUsuario == key:
+                print("Error! El usuario ya existe!")
+                encontrado = True
+                break
         
-        print("Registro agregado exitosamente")
+        if not(encontrado):
+            datos[miUsuario]= miPass
+            with open('baseDatos.json', 'w') as archivoDatos:
+                json.dump(datos, archivoDatos, ensure_ascii=False, indent=2)
+
+            print("Registro agregado exitosamente")
     
     except Exception as error:
         print("Ocurrio un error:", type(error).__name__) 
 
 def login():
-    pass
+    try:
+
+        datos = abrirBase()
+
+        passTemp = ""
+        encontrado = False
+
+        if len(datos)== 0:
+            print("La base está vacía")
+        else:
+            miUsuario = input("Ingrese nombre usuario: ")
+            miPass = input("Ingrese la contraseña: ")
+
+            for key, value in datos.items():
+                if key == miUsuario:
+                    encontrado = True
+                    passTemp = value
+                    break
+
+            if encontrado:
+                if passTemp == miPass:
+                        print("Login exitoso")
+                else:
+                        print("Contraseña incorrecta")
+            else:
+                print("El usuario no existe")
+
+    except Exception as error:
+        print("Ocurrio un error:", type(error).__name__) 
 
 try:
 
@@ -92,6 +128,3 @@ try:
                  
 except Exception as error:
     print("Ocurrio el error:", type(error).__name__) 
-
-
-    
