@@ -31,27 +31,48 @@ def crearBase():
         pausa()
 
 def abrirBase():
+    
+    datos = {}
+    
     try:
         with open('baseDatos.json', 'r') as archivoDatos:
             datos = json.load(archivoDatos)
-        return datos
     except Exception as error:
-        print("\n---- Ocurrio un error:", type(error).__name__) 
+        print("\n---- Ocurrio un error:", type(error).__name__)
+
+    return datos
+
+def existeBase():
+    
+    existe = False
+
+    try:
+        with open('baseDatos.json', 'r') as archivoDatos:
+            datos = json.load(archivoDatos)
+            existe = True
+    except Exception as error:
+        print("\n---- Ocurrio un error:", type(error).__name__)
+
+    return existe
+
 
 
 def leerBase():
     try:
 
-        datos = abrirBase()
+        if existeBase():
 
-        if len(datos)== 0:
-            print("\n---- La base está vacía ----\n")
+            datos = abrirBase()
+
+            if len(datos)== 0:
+                print("\n---- La base está vacía ----\n")
+            else:
+                print("\nUsuario / Password\n")
+                for key, value in datos.items():
+                    print(f"{key}: {value}")
         else:
-            print("\nUsuario / Password\n")
-            for key, value in datos.items():
-                print(f"{key}: {value}")
+            print("\n---- La base NO EXISTE, debe crearla primero ----\n")
 
-        return datos
     except Exception as error:
         print("\n---- Ocurrio un error:", type(error).__name__) 
     finally:
@@ -61,25 +82,29 @@ def alta():
 
     try:
 
-        datos = abrirBase()
+        if existeBase():
 
-        encontrado = False
-        miUsuario = input("\n - Ingrese nombre usuario: ")
-        miPass = input("\n  -- Ingrese la contraseña: ")
+            datos = abrirBase()
 
-        for key in datos:
-            if miUsuario == key:
-                print("\n---- Error! El usuario ya existe! ----\n")
-                encontrado = True
-                break
-        
-        if not(encontrado):
-            datos[miUsuario]= miPass
-            with open('baseDatos.json', 'w') as archivoDatos:
-                json.dump(datos, archivoDatos, ensure_ascii=False, indent=2)
+            encontrado = False
+            miUsuario = input("\n - Ingrese nombre usuario: ")
+            miPass = input("\n  -- Ingrese la contraseña: ")
 
-            print("\n----- Registro agregado exitosamente ----\n")
-    
+            for key in datos:
+                if miUsuario == key:
+                    print("\n---- Error! El usuario ya existe! ----\n")
+                    encontrado = True
+                    break
+                
+            if not(encontrado):
+                datos[miUsuario]= miPass
+                with open('baseDatos.json', 'w') as archivoDatos:
+                    json.dump(datos, archivoDatos, ensure_ascii=False, indent=2)
+
+                print("\n----- Registro agregado exitosamente ----\n")
+        else: 
+            print("\n---- La base NO EXISTE, debe crearla primero ----\n")
+
     except Exception as error:
         print("\n---- Ocurrio un error:", type(error).__name__) 
     finally:
@@ -88,30 +113,34 @@ def alta():
 def login():
     try:
 
-        datos = abrirBase()
+        if existeBase():
 
-        passTemp = ""
-        encontrado = False
+            datos = abrirBase()
 
-        if len(datos)== 0:
-            print("\n---- La base está vacía ----\n")
-        else:
-            miUsuario = input("\n - Ingrese nombre usuario: ")
-            miPass = input("\n  -- Ingrese la contraseña: ")
+            passTemp = ""
+            encontrado = False
 
-            for key, value in datos.items():
-                if key == miUsuario:
-                    encontrado = True
-                    passTemp = value
-                    break
-
-            if encontrado:
-                if passTemp == miPass:
-                        print("\n---- Login exitoso ----\n")
-                else:
-                        print("\n---- Contraseña incorrecta ----\n")
+            if len(datos)== 0:
+                print("\n---- La base está vacía ----\n")
             else:
-                print("\n----- El usuario no existe ----\n")
+                miUsuario = input("\n - Ingrese nombre usuario: ")
+                miPass = input("\n  -- Ingrese la contraseña: ")
+
+                for key, value in datos.items():
+                    if key == miUsuario:
+                        encontrado = True
+                        passTemp = value
+                        break
+
+                if encontrado:
+                    if passTemp == miPass:
+                            print("\n---- Login exitoso ----\n")
+                    else:
+                            print("\n---- Contraseña incorrecta ----\n")
+                else:
+                    print("\n----- El usuario no existe ----\n")
+        else:
+            print("\n---- La base NO EXISTE, debe crearla primero ----\n")
 
     except Exception as error:
         print("\n---- Ocurrio un error:", type(error).__name__) 
