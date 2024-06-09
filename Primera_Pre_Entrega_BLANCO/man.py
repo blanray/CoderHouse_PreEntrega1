@@ -2,6 +2,7 @@ import json
 import msvcrt
 import os
 
+### Ver archivo README para desripcion completa ###
 
 def pausa():
 
